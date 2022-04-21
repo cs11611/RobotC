@@ -32,7 +32,7 @@ task main()
 	// Config
 	bool isRight = true;
 	float forwardTime = 1.5;
-	float rotateTime = 0.5;
+	float rotateTime = 0.25;
 
 
 	while (true) {
