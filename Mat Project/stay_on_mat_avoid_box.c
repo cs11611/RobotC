@@ -10,27 +10,58 @@ task e_stop() {
 	untilTouch(e_stop_touch);
 	stopAllTasks();
 }
-
+int speed = 30;
 bool isCloseToBox(int threshold) {
 	return SensorValue[sonar_in] <= threshold;
 }
 bool isOffMat(int threshold) {
-
+	//1090 black
+	// 933 white
+	return SensorValue[light] < threshold;
 }
 void stopMoving() {
 	stopMotor(frontLeft);
 	stopMotor(frontRight);
 }
-
+void avoidBox() {
+		startMotor(frontLeft,speed);
+		startMotor(frontRight,-speed);
+		wait(1);
+		stopMotor(frontLeft);
+		stopMotor(frontRight);
+}
+void driveForward() {
+	startMotor(frontLeft,speed);
+	startMotor(frontRight,speed);
+}
+void driveBackward() {
+	startMotor(frontLeft,-speed);
+	startMotor(frontRight,-speed);
+}
+void stayOnMat() {
+		driveBackward();
+		wait(2);
+		stopMoving();
+		startMotor(frontRight,speed);
+		startMotor(frontLeft,-speed);
+		wait(1);
+		stopMotor(frontRight);
+		stopMotor(frontLeft);
+}
 int sonar_threshold = 10;
+int mat_threshold = 1000;
 task main()
 {
 	startTask(e_stop);
-	startMotor(frontLeft);
-	float test = SensorValue[light];
 	while (true) {
+		driveForward();
 		if (isCloseToBox(sonar_threshold)) {
 			stopMoving();
+			avoidBox();
+		}
+		if (isOffMat(mat_threshold)) {
+			stopMoving();
+			stayOnMat();
 		}
 	}
 
