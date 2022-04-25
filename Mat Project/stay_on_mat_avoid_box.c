@@ -17,7 +17,7 @@ bool isCloseToBox(int threshold) {
 bool isOffMat(int threshold) {
 	//1090 black
 	// 933 white
-	return SensorValue[light] < threshold;
+	return SensorValue[light] > threshold;
 }
 void stopMoving() {
 	stopMotor(frontLeft);
